@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <title>Check List</title>
+    <style>
+        body {
+            margin: 0;
+            min-width: 250px;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .container {
+            margin: 1%;
+        }
+
+        .header {
+            text-align: center;
+        }
+
+        ul {
+            margin: 0;
+            padding: 0;
+        }
+
+        li{
+            list-style-type: none;
+        }
+
+        ul li {
+            cursor: pointer;
+            position: relative;
+            padding: 12px 8px 12px 40px;
+            list-style-type: none;
+            background: #eee;
+            font-size: 18px;
+            transition: 0.2s;
+            
+            /* make the list items unselectable */
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        ul li:nth-child(odd) {
+            background: #f9f9f9;
+        }
+
+        ul li:hover {
+            background: #ddd;
+        }
+
+        ul li.checked {
+            background: #888;
+            color: #fff;
+            text-decoration: line-through;
+        }
+
+        ul li.checked::before {
+            content: '';
+            position: absolute;
+            border-color: #fff;
+            border-style: solid;
+            border-width: 0 2px 2px 0;
+            top: 10px;
+            left: 16px;
+            transform: rotate(45deg);
+            height: 15px;
+            width: 7px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>Check List</h1>
+        </div>
+        
+        <div class="body">
+            <ul id="list-tasks"></ul>
+        </div>
+    </div>
+
+    <script>
+        function getTasks() {
+            return [
+                {
+                    id: 1,
+                    description: 'Task 01'
+                },
+                {
+                    id: 2,
+                    description: 'Task 02'
+                },
+                {
+                    id: 3,
+                    description: 'Task 03'
+                },
+            ];
+        }
+
+        function listTaks() {
+            const ulTasks = document.getElementById('list-tasks');
+            
+            const tasks = getTasks();
+            
+            tasks.forEach(task => {
+
+                const idTask = 'task_' + task.id;
+
+                const liTask = document.createElement('li');
+
+                liTask.appendChild(document.createTextNode(task.description));
+
+                if(localStorage.getItem(idTask) == 'true'){
+                    liTask.classList.add("checked");
+                }else{
+                    localStorage.setItem(idTask, 'false');
+                }
+
+                liTask.addEventListener('click', function(){
+                    if(this.classList.contains('checked')){
+                        this.classList.remove('checked');
+                        localStorage.setItem(idTask, 'false');
+                    }else{
+                        this.classList.add("checked");
+                        localStorage.setItem(idTask, 'true');
+                    }
+                });
+
+                ulTasks.appendChild(liTask);
+            });
+        }
+
+        listTaks();
+    </script> 
+</body>
+</html>
